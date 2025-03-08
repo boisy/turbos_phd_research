@@ -82,7 +82,8 @@ int main(int argc, char **argv) {
 	
 	// Sleep forever and wait for a signal to drive the routine.
 	while (1) {
-		f_sleep(0);
+		rldec_task();
+//		f_sleep(100);
 	}
 	
 	return 0;
@@ -91,7 +92,7 @@ int main(int argc, char **argv) {
 void rldec_freertos(void *parameters) {
 	while(1) {
 		rldec_task();
-		vTaskDelay(100);
+//		vTaskDelay(100);
 	}
 }
 #else

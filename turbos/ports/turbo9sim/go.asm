@@ -46,8 +46,8 @@ sleep@         ldx       #0
 launch         clra                          no specific type/language
                clrb                          no additional memory pages
                pshs      u
-               leau      params,u
-               ldy       #1                  no parameters, so size is 0
+               leau      params,pcr
+               ldy       #1                  parameter size
                os9       F$Fork              fork the program
                puls      u,pc
 
