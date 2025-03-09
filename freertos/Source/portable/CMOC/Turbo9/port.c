@@ -130,10 +130,10 @@ void vPortEndScheduler( void )
 
 static void prvSetupTimerInterrupt( void )
 {
-	int *timerStatus = 0xFF01;
-	int *timerControl = 0xFF02;
+	int *timerStatus = 0xFF02;
+	int *timerControl = 0xFF03;
 
-	/* piggy back off of the CoCo BASIC timer */
+	/* set the IRQ and SWI vectors */
 	int *orgIRQAddress = 0xFFF8;
 	int *orgSWIAddress = 0xFFFA;
 
@@ -205,9 +205,9 @@ void vPortTickInterrupt( void )
 	portISR_HEAD();
 
         asm {
-         lda $ff01  get timer status register
+         lda $ff02  get timer status register
 		 ora #$01   set bit
-		 sta $ff01  and write it out to clear interrupt
+		 sta $ff02  and write it out to clear interrupt
     }
 	#if configUSE_PREEMPTION == 1
 	{
