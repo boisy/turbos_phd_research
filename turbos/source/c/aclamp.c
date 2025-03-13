@@ -30,22 +30,18 @@ int aclamp(unsigned char *src, unsigned char *dst, int src_size, unsigned char l
 }
 
 void aclamp_task() {
-	unsigned char src[12] = {1, 6, 9, 18, 19, 21, 2, 8,
-						9, 15, 23, 12};
+	unsigned char src[32] = {1, 6, 9, 18, 19, 21, 2, 8,
+						9, 15, 23, 12, 11, 15, 16, 7,
+						1, 6, 9, 18, 19, 21, 2, 8,
+						9, 15, 23, 12, 11, 15, 16, 7};
 
-	unsigned char dst[12];
+	unsigned char dst[32];
 	
-	aclamp(src, dst, 12, 3, 13);
+	aclamp(src, dst, 32, 3, 13);
 }
 
 #ifdef TURBOS
-interrupt void handler(void) {
-	aclamp_task();
-}
-
 int main(int argc, char **argv) {
-	f_icpt(handler);
-	
 	// Sleep forever and wait for a signal to drive the routine.
 	while (1) {
 		aclamp_task();

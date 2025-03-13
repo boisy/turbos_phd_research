@@ -27,31 +27,40 @@ edition        set       1
 sourcesize     equ       32
 
                org       0
-source         rmb       sourcesize
 dest           rmb       sourcesize*2
-stack          rmb       200
+stack          rmb       100
 size           equ       .
 
 name           fcs       /rlenc/
                fcb       edition
 
+source         fcb       1,1,2,2,1,4,4,4
+               fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+			   fcb       4,4,4,12,13,13,13,13
+
 start:
-	leax	sighandler,pcr		point to the signal handler
-	swi2
-	fcb		F$Icpt			install it
 	
 forever	
-	ldx       #0				timed sleep 0 means sleep forever
-	swi2
-	fcb		F$Sleep			perform sleep waiting on a signal
-	bra       forever			once we wake up, go back to sleep
-	
-sighandler
-	leax      source,u			point X to the source buffer
+	leax      source,pcr			point X to the source buffer
 	leay      dest,u              point Y to the destination buffer
 	ldd       #sourcesize         load D with the source size
-*	bsr      	rlenc			branch to the subroutine
-	rti						return from the signal handler
+ 	bsr       rlenc			branch to the subroutine
+*	ldx       #2				timed sleep 0 means sleep forever
+*	os9		  F$Sleep			perform sleep waiting on a signal
+	bra       forever			once we wake up, go back to sleep
 	
     use       rlenc.asm
 		     

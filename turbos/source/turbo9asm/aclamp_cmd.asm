@@ -27,29 +27,28 @@ edition        set       1
 sourcesize     equ       32
 
                org       0
-source         rmb       sourcesize
 dest           rmb       sourcesize*2
-stack          rmb       200
+stack          rmb       100
 size           equ       .
 
 name           fcs       /aclamp/
                fcb       edition
 
+source         fcb       1,6,9,18,19,21,2,8
+			   fcb       9,15,23,12,11,15,16,7
+               fcb       1,6,9,18,19,21,2,8
+               fcb       9,15,23,12,11,15,16,7
+
 start:
-	leax	sighandler,pcr		point to the signal handler
-	os9		F$Icpt			install it
 	
 forever	
-	ldx       #0				timed sleep 0 means sleep forever
-	os9		F$Sleep			perform sleep waiting on a signal
+	leax      source,pcr		point X to the source buffer
+    leay      dest,u            point Y to the destination buffer
+    ldd       #sourcesize       load D with the source size
+ 	bsr       aclamp			branch to the subroutine
+*	ldx       #2				timed sleep 0 means sleep forever
+*	os9		  F$Sleep			perform sleep waiting on a signal
 	bra       forever			once we wake up, go back to sleep
-	
-sighandler
-	leax      source,u			point X to the source buffer
-	leay      dest,u              point Y to the destination buffer
-	ldd       #sourcesize         load D with the source size
-*	bsr      	aclamp			branch to the subroutine
-	rti						return from the signal handler
 	
     use       aclamp.asm    
 	

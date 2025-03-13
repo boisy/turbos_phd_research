@@ -73,13 +73,7 @@ void rldec_task(void) {
 }
 
 #ifdef TURBOS
-interrupt void sighandler(void) {
-	rldec_task();
-}
-
 int main(int argc, char **argv) {
-	f_icpt(sighandler);
-	
 	// Sleep forever and wait for a signal to drive the routine.
 	while (1) {
 		rldec_task();

@@ -84,13 +84,7 @@ void rlenc_task(void) {
 // Destination is global variable for one-time allocation on heap.
 unsigned char dst[256];
 
-interrupt void sighandler(void) {	
-	rlenc_task();
-}
-
 int main(int argc, char **argv) {
-	f_icpt(sighandler);
-
 	// Sleep forever and wait for a signal to drive the routine.
 	while (1) {
 		rlenc_task();	
