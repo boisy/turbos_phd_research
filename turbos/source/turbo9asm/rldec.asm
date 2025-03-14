@@ -29,7 +29,7 @@ cl@
 	stb       ,y+		store byte in Y and increment
 	dec       ,s		decrement the counter on the stack
 	bne       cl@       continue if not 0
-	leas      -1,s      recover old count on stack
+	leas      1,s       recover old count on stack
 	bra       lp@       and go to top of loop for next pair
 done	
 	leas      4,s		destroy earlier pushed vars
