@@ -15,7 +15,7 @@ rldec:
 
 * 0,s = decode size (starts at 0, then increments)
 * 2,s = destination size
-loop_top
+lp@
 * is count 0?
 	ldb       ,x        get count (0 - 255) in B
 	beq       done      if 0, we're done
@@ -25,12 +25,12 @@ loop_top
 	bgt       err       too large... stop decoding
     ldd       ,x++		get the count in A and byte in B
 	pshs      a         save count on the stack
-copy_loop
+cl@
 	stb       ,y+		store byte in Y and increment
 	dec       ,s		decrement the counter on the stack
-	bne       copy_loop	continue if not 0
+	bne       cl@       continue if not 0
 	leas      -1,s      recover old count on stack
-	bra       loop_top  and go to top of loop for next pair
+	bra       lp@       and go to top of loop for next pair
 done	
 	leas      4,s		destroy earlier pushed vars
 	ldd       #0		load return with 0 (success)		

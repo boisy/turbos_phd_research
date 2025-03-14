@@ -56,19 +56,18 @@ OBJS=$(RTOS_OBJS:.c=.o)
 OBJS_C_EXEMPLARS=$(RTOS_OBJS_C_EXEMPLARS:.c=.o)
 OBJS_ASM_EXEMPLARS=$(RTOS_OBJS_ASM_EXEMPLARS:.c=.o)
 
-all:	freertos_baseline.img freertos_c_exemplars.img freertos_asm_exemplars.img
+all:	freertos_baseline.img freertos_c_exemplars.img
 	@ls -l freertos_baseline.obj
 	@ls -l freertos_c_exemplars.obj
-	@ls -l freertos_asm_exemplars.obj
 
 freertos_baseline.obj:	$(OBJS)
-	$(CC) $(LDFLAGS) --raw -o $@ $^ 
+	$(CC) -i $(LDFLAGS) --raw -o $@ $^ 
 
 freertos_c_exemplars.obj:	$(OBJS_C_EXEMPLARS)
-	$(CC) $(LDFLAGS) --raw -o $@ $^ 
+	$(CC) -i $(LDFLAGS) --raw -o $@ $^ 
 	
 freertos_asm_exemplars.obj:	$(OBJS_ASM_EXEMPLARS)
-	$(CC) $(LDFLAGS) --raw -o $@ $^ 
+	$(CC) -i $(LDFLAGS) --raw -o $@ $^ 
 	
 clean:
 	$(RM) $(OBJS) $(OBJS_C_EXEMPLARS) *.obj *.img *.rom *.tmp *.list *.map lastpage

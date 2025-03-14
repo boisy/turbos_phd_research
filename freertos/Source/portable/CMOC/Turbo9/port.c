@@ -188,7 +188,7 @@ void vPortYield( void )
 	vTaskSwitchContext();
 	portRESTORE_CONTEXT();
 	asm {
-		cwai #$50
+		cwai #^$50
 	}
 
 	portISR_TAIL();

@@ -1,4 +1,4 @@
-	* Run-length encoder in hand-optimized Turbo9 assembler
+* Run-length encoder in hand-optimized Turbo9 assembler
 *
 * Entry:
 *    X = source buffer

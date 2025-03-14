@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
 void rldec_freertos(void *parameters) {
 	while(1) {
 		rldec_task();
-//		vTaskDelay(100);
+		vTaskDelay(10);
 	}
 }
 #else

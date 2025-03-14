@@ -36,7 +36,7 @@ start          equ       *
                bsr       launch              launch it
                leax      rldec,pcr           point to program string
                bsr       launch              launch it
-               leax      aclamp,pcr           point to program string
+               leax      aclamp,pcr          point to program string
                bsr       launch              launch it
      
 sleep@         ldx       #0
@@ -45,8 +45,8 @@ sleep@         ldx       #0
                
 launch         clra                          no specific type/language
                clrb                          no additional memory pages
-               pshs      u
-               leau      params,pcr
+               pshs      u                   save statics pointer
+               leau      params,pcr          point to the parameter area
                ldy       #1                  parameter size
                os9       F$Fork              fork the program
                puls      u,pc

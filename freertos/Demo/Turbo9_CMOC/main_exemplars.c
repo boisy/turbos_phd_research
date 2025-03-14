@@ -150,11 +150,13 @@ portBASE_TYPE xLocalError = pdFALSE;
 /*-----------------------------------------------------------*/
 
 #define demoSTACK_SIZE         configMINIMAL_STACK_SIZE
-#ifdef INCLUDE_EXEMPLARS
-#include "../../../../turbos_phd_research/turbos/source/c/rlenc.c"
-#include "../../../../turbos_phd_research/turbos/source/c/rldec.c"
-#include "../../../../turbos_phd_research/turbos/source/c/aclamp.c"
-#endif
+void rlenc_freertos(void *parameters);
+void rldec_freertos(void *parameters);
+void aclamp_freertos(void *parameters);
+
+//#include "../../../../turbos_phd_research/turbos/source/c/rlenc.c"
+//#include "../../../../turbos_phd_research/turbos/source/c/rldec.c"
+//#include "../../../../turbos_phd_research/turbos/source/c/aclamp.c"
 
 /* This is called from startup. */
 int ATTR_BANK0 main ( void )
@@ -162,29 +164,27 @@ int ATTR_BANK0 main ( void )
     TaskHandle_t t1, t2, t3;
     BaseType_t ret;
 
-#ifdef INCLUDE_EXEMPLARS
 	/* Start some of the standard demo tasks. */
     ret = xTaskCreate(   rlenc_freertos,
-                                    "RLENC",
+                                    "RE",
                                     1024,
                                     NULL,
                                     0,
                                     ( TaskHandle_t * ) &t1 );
                                     
      ret = xTaskCreate(   rldec_freertos,
-                                    "RLDEC",
+                                    "RD",
                                     1024,
                                     NULL,
                                     0,
                                     ( TaskHandle_t * ) &t2 );
                                     
      ret = xTaskCreate(   aclamp_freertos,
-                                    "ACLAMP",
+                                    "AC",
                                     1024,
                                     NULL,
                                     0,
                                     ( TaskHandle_t * ) &t3 );
-#endif
                                     
 #if 0
 	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );

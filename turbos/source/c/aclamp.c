@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 void aclamp_freertos(void *parameters) {
 	while (1) {
 		aclamp_task();
-//		vTaskDelay(100);
+		vTaskDelay(10);
 	}
 }
 #else
