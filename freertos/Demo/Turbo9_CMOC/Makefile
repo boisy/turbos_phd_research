@@ -12,10 +12,10 @@ AS=$(DEVC_PREFIX)as
 AR=$(DEVC_PREFIX)ar
 \OBJDUMP=$(DEVC_PREFIX)lwobjdump
 
-CPPFLAGS+=-I. -I./asm-$(CPU)/arch-turbo9 -I../Common/include -I../../Source/portable/CMOC/Turbo9 \
+CPPFLAGS+=-i -I. -I./asm-$(CPU)/arch-turbo9 -I../Common/include -I../../Source/portable/CMOC/Turbo9 \
   -I$(RTOS_BASEDIR)/include -DCMOC_TURBO9
 
-CFLAGS+=-D$(CPU) -Wno-const -DFREERTOS
+CFLAGS+=-i -D$(CPU) -Wno-const -DFREERTOS
 
 #  ../Common/Minimal/PollQ.c
 

@@ -6,6 +6,9 @@
 #include <stdio.h>
 #endif
 
+// Destination is global variable for one-time allocation on heap.
+static unsigned char dst_buffer[64];											
+
 /*
  * Run-length encoder.
  * 
@@ -58,15 +61,7 @@ int rlenc(unsigned char *src, unsigned char *dst, int ssz) {
 }
 
 void rlenc_task(void) {
-	unsigned char src[128] = {1, 1, 2, 2, 1, 4, 4, 4,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
+	unsigned char src[64] = {1, 1, 2, 2, 1, 4, 4, 4,
 						4, 4, 4, 12, 13, 13, 13, 13,
 						4, 4, 4, 12, 13, 13, 13, 13,
 						4, 4, 4, 12, 13, 13, 13, 13,
@@ -75,15 +70,10 @@ void rlenc_task(void) {
 						4, 4, 4, 12, 13, 13, 13, 13,
 						4, 4, 4, 12, 13, 13, 13, 13};	
 					
-	unsigned char dst[256];
-											
-	rlenc(src, dst, 128);
+	rlenc(src, dst_buffer, 64);
 }
 
 #ifdef TURBOS
-// Destination is global variable for one-time allocation on heap.
-unsigned char dst[256];
-
 int main(int argc, char **argv) {
 	// Sleep forever and wait for a signal to drive the routine.
 	while (1) {
@@ -97,7 +87,7 @@ int main(int argc, char **argv) {
 void rlenc_freertos(void *parameters) {
 	while (1) {
 		rlenc_task();
-		vTaskDelay(10);
+//		vTaskDelay(10);
 	}
 }
 #else
@@ -115,15 +105,7 @@ void reportStatus(const char *function, int status) {
 int test1() {
 	int status = 0;
 	
-	unsigned char src[128] = {1, 1, 2, 2, 1, 4, 4, 4,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
+	unsigned char src[64] = {1, 1, 2, 2, 1, 4, 4, 4,
 						4, 4, 4, 12, 13, 13, 13, 13,
 						4, 4, 4, 12, 13, 13, 13, 13,
 						4, 4, 4, 12, 13, 13, 13, 13,
@@ -132,7 +114,6 @@ int test1() {
 						4, 4, 4, 12, 13, 13, 13, 13,
 						4, 4, 4, 12, 13, 13, 13, 13};						
 
-	unsigned char dst[256];					
 	unsigned char expected_dst[] = {2, 1, 2, 2, 1, 1, 6, 4,
 							 1, 12, 4, 13, 3, 4, 1, 12,
 							 4, 13, 3, 4, 1, 12, 4, 13,
@@ -146,7 +127,7 @@ int test1() {
 							 1, 12, 4, 13, 3, 4, 1, 12,
 							 4, 13, 3, 4, 1, 12, 4, 13};						
 	 
-	int dsz = rlenc(src, dst, 128);
+	int dsz = rlenc(src, dst_buffer, 64);
 
 	for (int i = 0; i < dsz; i++) {
 		if (dst[i] != expected_dst[i]) {

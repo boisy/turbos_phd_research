@@ -6,6 +6,9 @@
 #include <stdio.h>
 #endif
 
+// Destination is global variable for one-time allocation on heap.
+static unsigned char dst[33*2];					
+
 /*
  * Run-length decoder.
  * 
@@ -64,12 +67,12 @@ int rldec(unsigned char *src, unsigned char *dst, int dsz)
 
 void rldec_task(void) {
 	unsigned char src[33] = {1, 1, 2, 2, 1, 4, 4, 4,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13, 0};
-	unsigned char dst[256];					
+						4, 4, 4, 12, 13, 13, 23, 13,
+						2, 28, 1, 19, 13, 163, 3, 44,
+						7, 66, 8, 45, 3, 217, 13, 177,
+						0};
 
-	rldec(src, dst, 256);
+	rldec(src, dst, 33*2);
 }
 
 #ifdef TURBOS
@@ -86,7 +89,7 @@ int main(int argc, char **argv) {
 void rldec_freertos(void *parameters) {
 	while(1) {
 		rldec_task();
-		vTaskDelay(10);
+//		vTaskDelay(10);
 	}
 }
 #else
@@ -122,13 +125,13 @@ int decode_size(unsigned char *buffer) {
 int test1() {
 	int status = 0;
 
-	unsigned char src[33] = {255, 1, 2, 2, 1, 4, 4, 4,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13,
-						4, 4, 4, 12, 13, 13, 13, 13, 0};
-	unsigned char dst[256];					
-			
-	status = rldec(src, dst, 256);
+	unsigned char src[33] = {1, 1, 2, 2, 1, 4, 4, 4,
+							4, 4, 4, 12, 13, 13, 23, 13,
+							2, 28, 1, 19, 13, 163, 3, 44,
+							7, 66, 8, 45, 3, 217, 13, 177,
+							0};
+							
+	status = rldec(src, dst, 33*2);
 	
 	reportStatus(__func__, status == -1);	
 	
@@ -139,14 +142,13 @@ int test2() {
 	int status = 0;
 
 	unsigned char src[33] = {1, 5, 2, 8, 1, 12, 4, 16,
-						4, 2, 4, 3, 13, 6, 13, 7,
-						4, 1, 4, 0, 13, 3, 13, 11,
-						4, 5, 4, 6, 13, 19, 13, 9, 0};
-	unsigned char dst[256];					
+							4, 2, 4, 3, 13, 6, 13, 7,
+							4, 1, 4, 0, 13, 3, 13, 11,
+							4, 5, 4, 6, 13, 19, 13, 9, 0};
 	
-	status = rldec(src, dst, 256);
+	status = rldec(src, dst, 33*2);
 
-	reportStatus(__func__, status);	
+	reportStatus(__func__, status == 0);	
 	
 	return status;
 }

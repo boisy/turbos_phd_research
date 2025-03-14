@@ -6,6 +6,9 @@
 #include <stdio.h>
 #endif
 
+// Destination is global variable for one-time allocation on heap.
+static unsigned char dst[12];
+	
 /*
  * Audio clamp.
  *
@@ -35,9 +38,7 @@ void aclamp_task() {
 						1, 6, 9, 18, 19, 21, 2, 8,
 						9, 15, 23, 12, 11, 15, 16, 7};
 
-	unsigned char dst[32];
-	
-	aclamp(src, dst, 32, 3, 13);
+	aclamp(src, dst, 32, 3, 12);
 }
 
 #ifdef TURBOS
@@ -54,7 +55,7 @@ int main(int argc, char **argv) {
 void aclamp_freertos(void *parameters) {
 	while (1) {
 		aclamp_task();
-		vTaskDelay(10);
+//		vTaskDelay(10);
 	}
 }
 #else
@@ -75,12 +76,10 @@ int test1() {
 	unsigned char src[12] = {1, 6, 9, 18, 19, 21, 2, 8,
 						9, 15, 23, 12};
 
-	unsigned char clamped_test[12] = {3, 6, 9, 13, 13, 13, 3, 8,
-						9, 13, 13, 12};
+	unsigned char clamped_test[12] = {3, 6, 9, 12, 12, 12, 3, 8,
+						9, 12, 12, 12};
 
-	unsigned char dst[12];
-	
-	aclamp(src, dst, 12, 3, 13);
+	aclamp(src, dst, 12, 3, 12);
 
 	for (int i = 0; i < 12; i++) {
 		if (dst[i] != clamped_test[i]) {

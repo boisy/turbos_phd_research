@@ -130,18 +130,15 @@ void vPortEndScheduler( void )
 
 static void prvSetupTimerInterrupt( void )
 {
-	int *timerStatus = 0xFF02;
-	int *timerControl = 0xFF03;
+	char *timerStatus = 0xFF02;
+	char *timerControl = 0xFF03;
 
 	/* set the IRQ and SWI vectors */
 	int *orgIRQAddress = 0xFFF8;
 	int *orgSWIAddress = 0xFFFA;
 
-	char *orgSWIVector = 0x106;
-
  portDISABLE_INTERRUPTS()
 	*orgIRQAddress = vPortTickInterrupt;
-	*orgSWIVector = 0x7E;
 	*orgSWIAddress = vPortYield;
 
 	// enable interrupt on timer fire
