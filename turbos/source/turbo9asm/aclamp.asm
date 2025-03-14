@@ -1,25 +1,25 @@
 * Audio clamp in hand-optimized Turbo9 assembler
 *
 * Entry:
-*    A = upper clamp value
-*    B = lower clamp value
+*    A = low clamp value
+*    B = high clamp value
 *    X = source buffer
 *    Y = destination buffer
 *    U = source buffer size
 * Exit:
 *    D = destination size
 aclamp:
-    pshs       d
-l@  lda        ,x+
-	cmpa       ,s
-	ble        ok@
-	lda        ,s
-	bra        ok2@
-ok@ cmpa       1,s
-    bge        ok2@
-	lda        1,s
-ok2@ sta       ,y+
-    leau       -1,u
-	cmpu       #0
-	bne        l@	
-	puls       d,pc
+		pshs	d		save low/high clamp values
+loop@ 	lda     ,x+		get byte in source buffer
+		cmpa    ,s      compare to low clamp
+		bge     ok@		branch if >= (check high)
+		lda     ,s      load A with low clamp value
+		bra     ok2@    and continue to next byte
+ok@ 	cmpa    1,s     compare to high clamp
+    	ble     ok2@    branch if <= (byte in range)
+		lda     1,s     load A with high clamp value
+ok2@ 	sta     ,y+     save off to destination
+    	leau    -1,u    subtract source buffer size
+		cmpu    #0      at end?
+		bne     loop@   branch if not
+		puls    d,pc    pull D and return
