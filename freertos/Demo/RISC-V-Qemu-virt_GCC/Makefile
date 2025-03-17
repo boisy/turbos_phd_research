@@ -22,6 +22,9 @@ CPPFLAGS = \
 CFLAGS  = -mabi=ilp32 -mcmodel=medany \
 	-march=rv32i \
 	-Wall \
+	-Wno-array-bounds \
+	-Wno-unused-variable \
+	-Wno-return-type \
 	-fmessage-length=0 \
 	-ffunction-sections \
 	-fdata-sections \
